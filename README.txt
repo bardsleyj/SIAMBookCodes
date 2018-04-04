@@ -21,8 +21,8 @@
 %
 % >> Deblur1d 
 %
-% and then hit enter. You will several of the figures corresponding
-% to the deblurring example in Chapter 1. 
+% and then hit enter. This will generate several of the figures 
+% corresponding to the deblurring example in Chapter 1. 
 %
 % The MatFiles directory contains the true images used in the 
 % two-dimensional test cases: satellite.mat, cell.mat, and 
