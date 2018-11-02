@@ -33,21 +33,21 @@ for i = 1:nparams
     acfxi     = acf(x(i,:)');
     taux(i)   = iact(x(i,:)');
     acf_array = [acf_array; acfxi];
-    fprintf('%s chain stats: Geweke p-value = %2.5f, IACT = %2.5f, ESS = %2.5f, 95%% c.i. [%2.5f, %2.5f].\n',names(i),px(i),taux(i),nsamp/taux(i),xlims(1,i),xlims(3,i))
+    fprintf('%s chain stats: Geweke p-value = %2.5f, IACT = %2.5f, ESS = %2.5f, 95%% c.i. [%2.5f, %2.5f].\n',names{i},px(i),taux(i),nsamp/taux(i),xlims(1,i),xlims(3,i))
 end
 
 % Individual chain plots.
 figure(k) 
 for i=1:nparams
     subplot(nparams,1,i),plot([1:length(x(i,:))],x(i,:),'k-')
-    title([names(i)])%,':  IACT=',num2str(taux(i)),'  p_{Geweke}=',num2str(px(i))])
+    title([names{i}])%,':  IACT=',num2str(taux(i)),'  p_{Geweke}=',num2str(px(i))])
 end
 
 % Individual histograms.
 figure(k+1) 
 for i=1:nparams
     subplot(nparams,1,i),histogram(x(i,:),20), colormap(1-gray)
-    title([names(i)])%,'\tau_{int}=',num2str(taux(i)),' and  p_{Geweke}=',num2str(px(i)))
+    title([names{i}])%,'\tau_{int}=',num2str(taux(i)),' and  p_{Geweke}=',num2str(px(i)))
 end
 
 % Pairwise point plots.
@@ -57,7 +57,7 @@ for i = 1:nparams-1
     subplot(nparams-1,nparams-1,l)
     j = l-(i-1)*(nparams-1)+1;
     plot(x(j,:),x(i,:),'k.')
-    xlabel([names(j)])
-    ylabel([names(i)])
+    xlabel([names{j}])
+    ylabel([names{i}])
   end
 end
