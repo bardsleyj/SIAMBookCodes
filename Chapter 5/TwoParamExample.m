@@ -29,7 +29,9 @@ prop_flag            = 0; % enter 0 for normal & 1 for a lognormal proposal
 
 % Output for x_1- and x_2-chains using sample_plot.
 xchain       = xchain(:,nburnin+1:end);
-names        = ["x_1","x_2"];
+names        = cell(2,1);
+names{1}     = 'x_1';
+names{2}     = 'x_2';
 fignum       = 2;
 [taux,acfun] = sample_plot(xchain,names,fignum);
 % Plot the autocorrelations functions together.

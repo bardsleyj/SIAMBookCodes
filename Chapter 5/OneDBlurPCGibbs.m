@@ -94,15 +94,17 @@ close(h)
 % Plot the sample mean and 95% credibility intervals.
 nburnin        = floor(nsamps/10);
 xsamp          = xsamp(:,nburnin+1:end);
-q              = plims(xsamp(:,:)',[0.025,0.975]);
+q              = plims(xsamp(:,:)',[0.025,0.975])';
 x_mean         = mean(xsamp(:,:)')';
 relative_error = norm(x_true-x_mean)/norm(x_true);
 figure(2),
-plot(t,x_mean,'k',t,x_true,'-.k',t,q(2,:),'--k',t,q(1,:),'--k')
+plot(t,x_mean,'k',t,x_true,'-.k',t,q(:,2),'--k',t,q(:,1),'--k')
 legend('MCMC sample mean','true image','95% credibility bounds','Location','North')
 % Output for (lambda,delta)-chain using sample_plot: ACF, IACT, Geweke test
 lamdel_chain = [lamsamp(nburnin+1:end), delsamp(nburnin+1:end)]';
-names        = ["\lambda","\delta"];
+names        = cell(2,1);
+names{1}     = '\lambda';
+names{2}     = '\delta';
 fignum       = 3;
 [taux,acfun] = sample_plot(lamdel_chain,names,fignum);
 % Plot the autocorrelations functions together.

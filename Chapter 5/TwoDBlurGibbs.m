@@ -86,16 +86,18 @@ clear Lxtemp Axtemp xtemp ahat b bhat eta fourier_filt kernel lhat X Y
 % Plot the mean and 95% credibility intervals for x
 nburnin    = floor(nsamps/10); 
 xsamp      = xsamp(:,nburnin+1:end);
-q          = plims(xsamp(:,:)',[0.025,0.975]);
+q          = plims(xsamp(:,:)',[0.025,0.975])';
 x_mean     = mean(xsamp(:,:)')';
 relative_error = norm(x_true(:)-x_mean(:))/norm(x_true(:));
 figure(3), colormap(1-gray)
   imagesc(reshape(x_mean,n,n)), colorbar
 figure(4), colormap(1-gray)
-  imagesc(reshape(q(2,:)-q(1,:),n,n)), colorbar
+  imagesc(reshape(q(:,2)-q(:,1),n,n)), colorbar
 % Output for (lambda,delta)-chain using sample_plot: ACF, IACT, Geweke test
 lamdel_chain = [lamsamp(nburnin+1:end), delsamp(nburnin+1:end)]';
-names        = ["\lambda","\delta"];
+names        = cell(2,1);
+names{1}     = '\lambda';
+names{2}     = '\delta';
 fignum       = 5;
 [taux,acfun] = sample_plot(lamdel_chain,names,fignum);
 % Plot the autocorrelations functions together.
