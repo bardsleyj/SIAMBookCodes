@@ -71,7 +71,7 @@ legend('exp(z_{MAP})','x_{true}')
 
 %% Now, use RTO-MH to sample from the posterior distribution defined by
 %              
-%            p(x|b) \propto exp(-lam/2*||A(x)-b||^2-del/2*||D*x||^2).
+%            p(x|b) \propto exp(-lam/2*||A(x)-b||^2-del/2*||D*ln(x)||^2).
 %
 nsamp    = 4000;
 [Q,~]    = qr(JMAP,0);
@@ -82,19 +82,20 @@ xchain   = exp(zchain);
 
 % Visualize the MCMC chain
 % Plot the sample mean and 95% credibility intervals for x.
-xlims          = plims(xchain',[0.025,0.5,0.975]);
-relative_error = norm(log(x_true)-xlims(2,:))/norm(log(x_true))
+xlims          = plims(xchain',[0.025,0.5,0.975])';
+relative_error = norm(x_true-xlims(:,2))/norm(x_true)
 figure(3),
-plot(t,x_true,'k',t,xlims(2,:),'--k',t,xlims(1,:),'-.k',t,xlims(3,:),'-.k')
+plot(t,x_true,'k',t,xlims(:,2),'--k',t,xlims(:,1),'-.k',t,xlims(:,3),'-.k')
 legend('x_{true}','MCMC sample median','95% credibility bounds')
 % Output for individual chains using sample_plot: ACF, IACT, Geweke test.
 rng('shuffle')
 index        = sort(randsample(N,3));
 zchain_index = zchain(index,:);
-names(1)     = string(['z_{',num2str(index(1)),'}'])
-names(2)     = string(['z_{',num2str(index(2)),'}'])
-names(3)     = string(['z_{',num2str(index(3)),'}'])
-[tau,acf]    = sample_plot(zchain_index,names',4);
+names        = cell(3,1);
+names{1}     = char(['z_{',num2str(index(1)),'}']);
+names{2}     = char(['z_{',num2str(index(2)),'}']);
+names{3}     = char(['z_{',num2str(index(3)),'}']);
+[tau,acf]    = sample_plot(zchain_index,names,4);
 [~,nacf]     = size(acf);
 % Plot autocorrelation function.
 figure(7)

@@ -74,11 +74,12 @@ close(h)
 % Output for individual chains using sample_plot: ACF, IACT, Geweke test.
 nburnin   = nsamps/10;
 chain     = [lamsamp(nburnin+1:end)';xchain(:,nburnin+1:end)];
-names(1)  = string('\lambda');
-names(2)  = string(['x_{1}']);
-names(3)  = string(['x_{2}']);
+names     = cell(3,1);
+names{1}  = '\lambda';
+names{2}  = 'x_{1}';
+names{3}  = 'x_{2}';
 [tau,acf] = sample_plot(chain,names,2);
-[~,nacf]       = size(acf);
+[~,nacf]  = size(acf);
 % Generate pairwise plot for x_1 and x_2.
 figure(5)
 plot(xchain(1,nburnin+1:end),xchain(2,nburnin+1:end),'k.')

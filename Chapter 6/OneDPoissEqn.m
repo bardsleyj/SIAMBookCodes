@@ -82,20 +82,21 @@ p.Nrand  = Nresid;
 
 % Visualize the MCMC chain
 % Plot the sample mean and 95% credibility intervals.
-xlims          = plims(xchain',[0.025,0.5,0.975]);
-relative_error = norm(x_true-xlims(2,:))/norm(x_true);
+xlims          = plims(xchain',[0.025,0.5,0.975])';
+relative_error = norm(x_true-xlims(:,2))/norm(x_true);
 figure(3),
-plot(s_mid,x_true,'k',s_mid,xMAP,'--k',s_mid,xlims(1,:),'-.k',s_mid,xlims(3,:),'-.k')
+plot(s_mid,x_true,'k',s_mid,xMAP,'--k',s_mid,xlims(:,1),'-.k',s_mid,xlims(:,3),'-.k')
 legend('x_{true}','x_{MAP}','95% credibility bounds','Location','North')
 % Output for individual chains using sample_plot: ACF, IACT, Geweke test.
 rng('shuffle')
 index          = sort(randsample(N,3));
 xchain_index   = xchain(index,:);
-names(1)       = string(['x_{',num2str(index(1)),'}']);
-names(2)       = string(['x_{',num2str(index(2)),'}']);
-names(3)       = string(['x_{',num2str(index(3)),'}']);
-[tau,acf]   = sample_plot(xchain_index,names',4);
-[~,nacf]     = size(acf);
+names          = cell(3,1);
+names{1}       = char(['x_{',num2str(index(1)),'}']);
+names{2}       = char(['x_{',num2str(index(2)),'}']);
+names{3}       = char(['x_{',num2str(index(3)),'}']);
+[tau,acf]      = sample_plot(xchain_index,names,4);
+[~,nacf]       = size(acf);
 % Plot autocorrelation function.
 figure(7)
     plot(acf(1,1:nacf),'k'), hold on 

@@ -50,7 +50,9 @@ for i=1:nsamp
 end
 
 % Output for individual chains using sample_plot: ACF, IACT, Geweke test.
-names            = ["x_1","x_2"]; 
+names            = cell(2,1);
+names{1}         = 'x_1';
+names{2}         = 'x_2';  
 [taux,acf_array] = sample_plot(xchain,names,2);
 
 % Plot the autocorrelations functions together.
