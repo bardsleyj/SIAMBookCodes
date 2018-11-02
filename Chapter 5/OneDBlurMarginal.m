@@ -63,7 +63,9 @@ prop_flag         = 1; % enter 0 for normal & 1 for a lognormal proposal
 
 % Output for (lambda,delta)-chain using sample_plot: ACF, IACT, Geweke test
 nburnin      = nsamps/10; 
-names        = ["\lambda","\delta"];
+names        = cell(2,1);
+names{1}     = '\lambda';
+names{2}     = '\delta';
 fignum       = 2;
 [taux,acfun] = sample_plot(lamdel_chain(:,nburnin+1:end),names,fignum);
 % Plot the autocorrelations functions together.
