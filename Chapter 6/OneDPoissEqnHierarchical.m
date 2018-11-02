@@ -122,17 +122,19 @@ nburnin        = nsamps/5;
 xchain         = xchain(:,nburnin:end);
 delsamp        = delsamp(nburnin:end);
 lamsamp        = lamsamp(nburnin:end);
-xlims          = plims(xchain(:,nburnin:end)',[0.025,0.5,0.975]);
-relative_error = norm(x_true-xlims(2,:))/norm(x_true);
+xlims          = plims(xchain(:,nburnin:end)',[0.025,0.5,0.975])';
+relative_error = norm(x_true-xlims(:,2))/norm(x_true);
 figure(3),
-plot(s_mid,x_true,'k',s_mid,xlims(2,:),'--k',s_mid,xlims(1,:),'-.k',s_mid,xlims(3,:),'-.k')
+plot(s_mid,x_true,'k',s_mid,xlims(:,2),'--k',s_mid,xlims(:,1),'-.k',s_mid,xlims(:,3),'-.k')
 legend('x_{true}','Sample Median','95% credibility bounds','Location','North')
 % Output for individual chains using sample_plot: ACF, IACT, Geweke test.
-names(1)       = string('\lambda');
-names(2)       = string('\delta');
+names          = cell(2,1);
+names{1}       = '\lambda';
+names{2}       = '\delta';
 index          = randsample(N,1);  % randomly chosen element of x.
-names(3)       = string(['x_{',num2str(index),'}']);
-[tau,acf]      = sample_plot([lamsamp';delsamp';xchain(index,:)],names',4);
+xindex         = xchain(index,:);
+names{3}       = char(['x_{',num2str(index),'}']);
+[tau,acf]      = sample_plot([lamsamp';delsamp';xindex],names,4);
 [~,nacf]       = size(acf);
 % Plot autocorrelation function.
 figure(7)
