@@ -13,6 +13,7 @@
 %
 %  This m-file was used to generate a plot in Chapter 5 of the book.
 clear all, close all
+path(path,'../Functions');
 n = 80; % No. of grid points 
 h = 1/n;
 t = [h/2:h:1-h/2]';

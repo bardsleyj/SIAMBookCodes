@@ -14,6 +14,7 @@
 %
 %  This m-file was used to generate a plot in Chapter 5 of the book.
 clear all, close all
+path(path,'../Functions');
 load ../MatFiles/satellite
 x_true = x_true/max(x_true(:));
 [n,n] = size(x_true);
