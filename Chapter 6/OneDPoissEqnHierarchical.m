@@ -1,4 +1,4 @@
-%  OneDPoissonEqn.m
+%  OneDPoissonEqnHierarchical.m
 %  First set up finite difference discretization of 1-d steady-state 
 %  diffusion equation,
 %    -d/ds(x(s) du/ds) = f(s),  0 < s < 1,  l = 1,2,
@@ -7,6 +7,9 @@
 %       f(x) = delta(x-1/3)  and f(x) = delta(x-2/3).
 %  Then we solve for u and generate data [d_1;d_2] corresponding to the 
 %  two forcing functions. 
+%
+%  After that, we implement a hierarchical Gibbs MCMC method, which makes 
+%  use of conjugacy relationships and embedded  RTO-MH samples.
 %
 %  written by John Bardsley 2016.
 %
@@ -102,7 +105,7 @@ for i = 1:nsamps-1
     % conjugate prior: delta~Gamma(a1,1/t1);
     delsamp(i+1) = gamrnd(a1+Nbar/2,1./(t1+norm(Dreg*xchain(:,i))^2/2));
     %------------------------------------------------------------------
-    % 2. Using conjugacy relationships, sample the image.
+    % 2. Sample the diffusion coefficient using RTO.
     p.lam  = lamsamp(i+1);
     p.del  = delsamp(i+1); 
     % Compute the MAP estimator for lamdba and delta and corresponding Q
@@ -122,13 +125,13 @@ nburnin        = nsamps/5;
 xchain         = xchain(:,nburnin:end);
 delsamp        = delsamp(nburnin:end);
 lamsamp        = lamsamp(nburnin:end);
-xlims          = plims(xchain(:,nburnin:end)',[0.025,0.5,0.975])';
+xlims          = plims(xchain',[0.025,0.5,0.975])';
 relative_error = norm(x_true-xlims(:,2))/norm(x_true);
 figure(3),
 plot(s_mid,x_true,'k',s_mid,xlims(:,2),'--k',s_mid,xlims(:,1),'-.k',s_mid,xlims(:,3),'-.k')
 legend('x_{true}','Sample Median','95% credibility bounds','Location','North')
 % Output for individual chains using sample_plot: ACF, IACT, Geweke test.
-names          = cell(2,1);
+names          = cell(3,1);
 names{1}       = '\lambda';
 names{2}       = '\delta';
 index          = randsample(N,1);  % randomly chosen element of x.
