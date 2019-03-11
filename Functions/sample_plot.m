@@ -22,7 +22,7 @@ end
 
 % Compute sample median and 95% credibility intervals for each of the
 % parameters. xlims has dimension 3 by nparams.
-xlims = plims(x',[0.025,0.5,0.975]);
+xlims = plims(x',[0.025,0.5,0.975])';
 
 % Output chain stats and plot autocorrelation functions
 acf_array = [];
@@ -33,7 +33,8 @@ for i = 1:nparams
     acfxi     = acf(x(i,:)');
     taux(i)   = iact(x(i,:)');
     acf_array = [acf_array; acfxi];
-    fprintf('%s chain stats: Geweke p-value = %2.5f, IACT = %2.5f, ESS = %2.5f, 95%% c.i. [%2.5f, %2.5f].\n',names{i},px(i),taux(i),nsamp/taux(i),xlims(1,i),xlims(3,i))
+    xlimsi    = xlims(i,:);
+    fprintf('%s chain stats: Geweke p-value = %2.5f, IACT = %2.5f, ESS = %2.5f, 95%% c.i. [%2.5f, %2.5f].\n',names{i},px(i),taux(i),nsamp/taux(i),xlimsi(1),xlimsi(3))
 end
 
 % Individual chain plots.
@@ -51,13 +52,15 @@ for i=1:nparams
 end
 
 % Pairwise point plots.
-figure(k+2)
-for i = 1:nparams-1
-  for l = (i-1)*nparams+1:i*(nparams-1)
-    subplot(nparams-1,nparams-1,l)
-    j = l-(i-1)*(nparams-1)+1;
-    plot(x(j,:),x(i,:),'k.')
-    xlabel([names{j}])
-    ylabel([names{i}])
-  end
+if nparams>1
+    figure(k+2)
+    for i = 1:nparams-1
+        for l = (i-1)*nparams+1:i*(nparams-1)
+            subplot(nparams-1,nparams-1,l)
+            j = l-(i-1)*(nparams-1)+1;
+            plot(x(j,:),x(i,:),'k.')
+            xlabel([names{j}])
+            ylabel([names{i}])
+        end
+    end
 end
